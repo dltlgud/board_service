@@ -1,0 +1,52 @@
+# EC2 배포용 board_service 설정
+# 이 파일을 EC2의 /home/ubuntu/config/board/application.yml 에 복사
+spring:
+  application:
+    name: board_service
+
+  thymeleaf:
+    cache: false
+
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    # TODO: Oracle DB 접속 정보를 실제 EC2 DB 주소로 변경
+    url: jdbc:oracle:thin:@//127.0.0.1:1521/xe
+    username: FINAL_ORAUSER3
+    password: sistsix
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+
+  jpa:
+    database-platform: org.hibernate.dialect.OracleDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        '[show_sql]': false
+        '[format_sql]': false
+    open-in-view: false
+
+server:
+  port: 8002
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+jwt:
+  secret: e37ea07e222779c4066309ce10e47004a9718bbbc8e1062b7b4bca9b5d89a83d
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
