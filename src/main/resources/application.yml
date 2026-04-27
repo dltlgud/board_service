@@ -40,6 +40,7 @@ logging:
 
 server:
   port: 8002
+  forward-headers-strategy: framework
   servlet:
     encoding:
       charset: UTF-8
